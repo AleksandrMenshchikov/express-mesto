@@ -1,0 +1,29 @@
+{
+  "name": "express-mesto",
+  "version": "1.0.0",
+  "description": "Project Mesto frontend + backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AleksandrMenshchikov/express-mesto.git"
+  },
+  "author": "Aleksandr Menshchikov <aleksandr.menshikov@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AleksandrMenshchikov/express-mesto/issues"
+  },
+  "homepage": "https://github.com/AleksandrMenshchikov/express-mesto#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
