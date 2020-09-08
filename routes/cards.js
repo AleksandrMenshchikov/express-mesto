@@ -5,20 +5,22 @@ const path = require('path');
 router.get('/cards', (req, res) => {
   const pathCards = path.join(__dirname, '..', 'data', 'cards.json');
 
-  fs.stat(pathCards, (err, stats) => {
+  fs.stat(pathCards, (err) => {
     if (err) {
-      if (err.code === 'ENOENT') res.status(500).send({ message: 'Нет файла с данными на сервере' });
-    } else if (stats.isFile()) {
-      const readerCardsStream = fs.createReadStream(pathCards);
-      readerCardsStream.on('data', (chunk) => {
-        try {
-          res.send(JSON.parse(chunk));
-        } catch (error) {
-          console.log(error);
-          res.status(500).send({ message: 'Файл данных имеет ошибки' });
-        }
-      });
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+      return;
     }
+
+    const readerCardsStream = fs.createReadStream(pathCards);
+
+    readerCardsStream.on('data', (chunk) => {
+      try {
+        res.send(JSON.parse(chunk));
+      } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+      }
+    });
   });
 });
 

@@ -5,20 +5,22 @@ const path = require('path');
 router.get('/users', (req, res) => {
   const pathUsers = path.join(__dirname, '..', 'data', 'users.json');
 
-  fs.stat(pathUsers, (err, stats) => {
+  fs.stat(pathUsers, (err) => {
     if (err) {
-      if (err.code === 'ENOENT') res.status(500).send({ message: 'Нет файла с данными на сервере' });
-    } else if (stats.isFile()) {
-      const readerUsersStream = fs.createReadStream(pathUsers);
-      readerUsersStream.on('data', (chunk) => {
-        try {
-          res.send(JSON.parse(chunk));
-        } catch (error) {
-          console.log(error);
-          res.status(500).send({ message: 'Файл данных имеет ошибки' });
-        }
-      });
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+      return;
     }
+
+    const readerUsersStream = fs.createReadStream(pathUsers);
+
+    readerUsersStream.on('data', (chunk) => {
+      try {
+        res.send(JSON.parse(chunk));
+      } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+      }
+    });
   });
 });
 
@@ -26,7 +28,7 @@ router.get('/users/:id', (req, res) => {
   fs.readFile(path.join(__dirname, '..', 'data', 'users.json'), (err, data) => {
     if (err) {
       console.log(err);
-      res.status(500);
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' });
       return;
     }
 
@@ -36,7 +38,8 @@ router.get('/users/:id', (req, res) => {
       dataObject = JSON.parse(data);
     } catch (error) {
       console.log(error);
-      res.status(500).send({ message: 'Файл данных имеет ошибки' });
+      res.status(500).send({ message: 'Внутренняя ошибка сервера' });
+      return;
     }
 
     const foundIndexData = dataObject.findIndex((item) => item._id === req.params.id);
