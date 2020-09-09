@@ -7,6 +7,7 @@ router.get('/users', (req, res) => {
 
   fs.stat(pathUsers, (err) => {
     if (err) {
+      console.log(err);
       res.status(500).send({ message: 'Внутренняя ошибка сервера' });
       return;
     }

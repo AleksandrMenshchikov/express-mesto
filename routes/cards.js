@@ -7,6 +7,7 @@ router.get('/cards', (req, res) => {
 
   fs.stat(pathCards, (err) => {
     if (err) {
+      console.log(err);
       res.status(500).send({ message: 'Внутренняя ошибка сервера' });
       return;
     }
