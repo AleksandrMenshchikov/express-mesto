@@ -1,28 +1,12 @@
 const router = require('express').Router();
-const fs = require('fs');
-const path = require('path');
+const {
+  getCards, createCard, deleteCard, likeCard, dislikeCard,
+} = require('../controllers/cards');
 
-router.get('/cards', (req, res) => {
-  const pathCards = path.join(__dirname, '..', 'data', 'cards.json');
-
-  fs.stat(pathCards, (err) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send({ message: 'Внутренняя ошибка сервера' });
-      return;
-    }
-
-    const readerCardsStream = fs.createReadStream(pathCards);
-
-    readerCardsStream.on('data', (chunk) => {
-      try {
-        res.send(JSON.parse(chunk));
-      } catch (error) {
-        console.log(error);
-        res.status(500).send({ message: 'Внутренняя ошибка сервера' });
-      }
-    });
-  });
-});
+router.get('/', getCards);
+router.post('/', createCard);
+router.delete('/:id', deleteCard);
+router.put('/:cardId/likes', likeCard);
+router.delete('/:cardId/likes', dislikeCard);
 
 module.exports = router;
